@@ -1,4 +1,20 @@
-## [2.15.0] - yyyy-mm-dd
+## [2.17.1] - 2026-04-12
+- Made `SSHPem.decode` accept CRLF (`\r\n`) line endings in addition to LF when parsing PEM content [#157]. Thanks [@gkc].
+
+## [2.17.0] - 2026-03-28
+- Improved Web/WASM compatibility by updating `SSHSocket` conditional imports so web runtimes consistently use the web socket shim and avoid incorrect native socket selection [#88]. Thanks [@vicajilau].
+- Added local dynamic forwarding (`SSHClient.forwardDynamic`) with SOCKS5 `NO AUTH` + `CONNECT`, including configurable handshake/connect timeouts and connection limits.
+- Added AES-GCM (`aes128-gcm@openssh.com`, `aes256-gcm@openssh.com`) AEAD groundwork in transport and cipher negotiation; currently opt-in (not enabled by default yet). `chacha20-poly1305@openssh.com` remains pending [#26]. Thanks [@vicajilau].
+
+## [2.16.0] - 2026-03-24
+- **BREAKING**: Changed `SSHChannelController.sendEnv()` from `void` to `Future<bool>` to properly await environment variable setup responses and avoid race conditions with PTY requests [#102]. Thanks [@itzhoujun] and [@vicajilau].
+- Clarified shell stdio wiring for CLI-only usage and guarded `example/shell.dart` against missing local terminal handles (for example GUI-launched Windows `.exe`) [#121]. Thanks [@bradmartin333] and [@vicajilau].
+- Added support for parsing legacy unencrypted `EC PRIVATE KEY` PEM format in `SSHKeyPair.fromPem` [#109]. Thanks [@jooy2] and [@vicajilau].
+- Added `SSHClient.runWithResult()` to expose command output together with `exitCode` and `exitSignal` while keeping `run()` as a convenience API [#99]. Thanks [@falrom] and [@vicajilau].
+- Added non-breaking high-level SFTP `download()` / `downloadTo()` APIs and read pipeline tuning knobs (`chunkSize`, `maxPendingRequests`) for improved large-file throughput while preserving stream compatibility [#124]. Thanks [@vicajilau].
+- Made SFTP directory/file name parsing tolerant to malformed UTF-8 bytes to avoid `FormatException` on non-UTF-8 server filenames [#95]. Thanks [@vicajilau].
+
+## [2.15.0] - 2026-03-20
 - Updated `pointycastle` dependency to `^4.0.0` [#131]. Thanks [@vicajilau].
 - Added foundational X11 forwarding support with session x11-req API, incoming x11 channel handling, and protocol tests [#1]. Thanks [@vicajilau].
 - Exposed SSH ident configuration from `SSHClient` [#135]. Thanks [@Remulic] and [@vicajilau].
@@ -188,6 +204,16 @@
 [#141]: https://github.com/TerminalStudio/dartssh2/pull/141
 [#140]: https://github.com/TerminalStudio/dartssh2/pull/140
 [#145]: https://github.com/TerminalStudio/dartssh2/pull/145
+[#153]: https://github.com/TerminalStudio/dartssh2/pull/153
+[#157]: https://github.com/TerminalStudio/dartssh2/pull/157
+[#102]: https://github.com/TerminalStudio/dartssh2/issues/102
+[#99]: https://github.com/TerminalStudio/dartssh2/issues/99
+[#109]: https://github.com/TerminalStudio/dartssh2/issues/109
+[#121]: https://github.com/TerminalStudio/dartssh2/issues/121
+[#124]: https://github.com/TerminalStudio/dartssh2/issues/124
+[#95]: https://github.com/TerminalStudio/dartssh2/issues/95
+[#88]: https://github.com/TerminalStudio/dartssh2/issues/88
+[#26]: https://github.com/TerminalStudio/dartssh2/issues/26
 [#139]: https://github.com/TerminalStudio/dartssh2/pull/139
 [#132]: https://github.com/TerminalStudio/dartssh2/pull/132
 [#133]: https://github.com/TerminalStudio/dartssh2/pull/133
@@ -218,4 +244,10 @@
 [@alexander-irion]: https://github.com/alexander-irion
 [@Remulic]: https://github.com/Remulic
 [@james-thorpe]: https://github.com/james-thorpe
+[@itzhoujun]: https://github.com/itzhoujun
+[@jooy2]: https://github.com/jooy2
+[@falrom]: https://github.com/falrom
+[@bradmartin333]: https://github.com/bradmartin333
 [@Wackymax]: https://github.com/Wackymax
+[@gkc]: https://github.com/gkc
+[@vicajilau]: https://github.com/vicajilau
