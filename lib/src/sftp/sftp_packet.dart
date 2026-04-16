@@ -101,9 +101,14 @@ class SftpVersionPacket implements SftpPacket {
     final version = reader.readUint32();
     final extensions = <String, String>{};
     while (!reader.isDone) {
-      final name = reader.readUtf8();
-      final value = reader.readUtf8();
-      extensions[name] = value;
+      try {
+        final name = reader.readUtf8();
+        final value = reader.readUtf8();
+        extensions[name] = value;
+      } catch (_) {
+        // Skip malformed/non-UTF8 extension data sent by some SFTP servers
+        break;
+      }
     }
     return SftpVersionPacket(version, extensions);
   }
