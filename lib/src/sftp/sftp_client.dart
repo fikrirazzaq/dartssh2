@@ -599,7 +599,7 @@ class SftpFile {
 
       if (onProgress != null) onProgress(bytessRecieved);
 
-      if (bytessRecieved >= length) {
+      if (bytessRecieved >= length!) {
         streamController.close();
         return;
       }
